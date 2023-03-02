@@ -6,6 +6,9 @@ import { useDocumentData } from 'react-firebase-hooks/firestore';
 import HeartButton from '../../components/HeartButton';
 import AuthCheck from '../../components/AuthCheck';
 import Link from 'next/link';
+import Metatags from '../../components/Metatags';
+import { UserContext } from '../../lib/context';
+import { useContext } from 'react';
 
 export async function getStaticProps({ params }) {
     const { username, slug } = params;
@@ -23,7 +26,7 @@ export async function getStaticProps({ params }) {
 
     return {
         props: { post, path },
-        revalidate: 5000
+        revalidate: 100
     };
 }
 
@@ -52,6 +55,7 @@ export default function Post(props) {
 
     return (
         <main className={styles.container}>
+            <Metatags title={post.title} description={post.title} />
 
             <section>
                 <PostContent post={post} />
@@ -61,7 +65,16 @@ export default function Post(props) {
                 <p>
                     <strong>{post.heartCount || 0} 🤍</strong>
                 </p>
-                
+
+                <AuthCheck
+                    fallback={
+                        <Link href='/enter'>
+                            <button>💗 Sign Up</button>
+                        </Link>
+                    }
+                >
+                    <HeartButton postRef={postRef} />
+                </AuthCheck>
             </aside>
         </main>
     );
