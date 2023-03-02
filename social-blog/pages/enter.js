@@ -2,19 +2,21 @@ import { auth, firestore, googleAuthProvider } from '../lib/firebase';
 import { useEffect, useState, useCallback, useContext } from 'react';
 import { UserContext } from '../lib/context';
 import debounce from 'lodash.debounce';
+import MetaTags from '../components/Metatags';
 
 export default function Enter(props) {
     const { user, username } = useContext(UserContext)
 
     return (
         <main>
+            <MetaTags title='Enter' description='Sign up for this amazing app!' />
             {user ?
                 !username ? <UsernameForm /> : <SignOutButton />
                 :
                 <SignInButton />
             }
         </main>
-    )
+    );
 }
 
 function SignInButton () {
