@@ -48,7 +48,7 @@ function CreateNewPost() {
     const isValid = title.length > 3 && title.length < 100;
 
     const createPost = async (e) => {
-        e.prevenDefault();
+        e.preventDefault();
         const uid = auth.currentUser.uid;
         const ref = firestore.collection('users').doc(uid).collection('posts').doc(slug);
 
