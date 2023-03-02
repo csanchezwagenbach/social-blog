@@ -1,13 +1,14 @@
 import styles from '../../styles/Admin.module.css';
 import AuthCheck from '../../components/AuthCheck';
 import { firestore, auth, serverTimestamp } from '../../lib/firebase';
+import ImageUploader from '../../components/ImageUploader';
 
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { useForm } from 'react-hook-form';
-import  ReactMarkdown  from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -32,20 +33,20 @@ function PostManager() {
         <main className={styles.container}>
             {post && (
                 <>
-                <section>
-                    <h1>{post.title}</h1>
-                    <p>ID: {post.slug}</p>
+                    <section>
+                        <h1>{post.title}</h1>
+                        <p>ID: {post.slug}</p>
 
-                    <PostForm postRef={postRef} defaultValues={post} preview={preview} />
-                </section>
+                        <PostForm postRef={postRef} defaultValues={post} preview={preview} />
+                    </section>
 
-                <aside>
-                    <h3>Tools</h3>
-                    <button onClick={() => setPreview(!preview)}>{preview ? 'Edit' : 'Preview'}</button>
-                    <Link href={`/${post.username}/${post.slug}`}>
-                        <button className='btn-blue'>Live view</button>
-                    </Link>
-                </aside>
+                    <aside>
+                        <h3>Tools</h3>
+                        <button onClick={() => setPreview(!preview)}>{preview ? 'Edit' : 'Preview'}</button>
+                        <Link href={`/${post.username}/${post.slug}`}>
+                            <button className='btn-blue'>Live view</button>
+                        </Link>
+                    </aside>
                 </>
             )}
         </main>
@@ -79,7 +80,9 @@ function PostForm({ defaultValues, postRef, preview }) {
 
             <div className={preview ? styles.hidden : styles.controls}>
 
-                <textarea name='content' {...register('content', { required: { value: true, message: 'content is required'}, maxLength: { value: 20000, message: 'content is too long' }, minLength: { value: 10, message: 'content is too short' } })}></textarea>
+                <ImageUploader />
+
+                <textarea name='content' {...register('content', { required: { value: true, message: 'content is required' }, maxLength: { value: 20000, message: 'content is too long' }, minLength: { value: 10, message: 'content is too short' } })}></textarea>
 
                 {errors.content && <p className='text-danger'>{errors.content.message}</p>}
 
